@@ -33,18 +33,14 @@ def emotion_detector(text_to_analyse):
         }
 
     response_payload = response.json()
-    emotion_scores = response_payload.get("emotion", {})
-    scores = {}
-    for emotion in EMOTION_KEYS:
-        score = emotion_scores.get(emotion, {}).get("score")
-        scores[emotion] = score
-
-    valid_scores = {key: value for key, value in scores.items() if value is not None}
-    dominant_emotion = None
-    if valid_scores:
-        dominant_emotion = max(valid_scores, key=valid_scores.get)
+    emotion_scores = response_payload["emotionPredictions"][0]["emotion"]
+    dominant_emotion = max(emotion_scores, key=emotion_scores.get)
 
     return {
-        **scores,
+        "anger": emotion_scores["anger"],
+        "disgust": emotion_scores["disgust"],
+        "fear": emotion_scores["fear"],
+        "joy": emotion_scores["joy"],
+        "sadness": emotion_scores["sadness"],
         "dominant_emotion": dominant_emotion,
     }

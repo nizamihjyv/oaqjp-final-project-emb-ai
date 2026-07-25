@@ -33,24 +33,28 @@ class EmotionDetectorTests(unittest.TestCase):
 
         for text, expected_emotion in cases:
             payload = {
-                "emotion": {
-                    "anger": {"score": 0.1},
-                    "disgust": {"score": 0.1},
-                    "fear": {"score": 0.1},
-                    "joy": {"score": 0.1},
-                    "sadness": {"score": 0.1},
-                }
+                "emotionPredictions": [
+                    {
+                        "emotion": {
+                            "anger": 0.1,
+                            "disgust": 0.1,
+                            "fear": 0.1,
+                            "joy": 0.1,
+                            "sadness": 0.1,
+                        }
+                    }
+                ]
             }
             if expected_emotion == "joy":
-                payload["emotion"]["joy"]["score"] = 0.9
+                payload["emotionPredictions"][0]["emotion"]["joy"] = 0.9
             elif expected_emotion == "anger":
-                payload["emotion"]["anger"]["score"] = 0.9
+                payload["emotionPredictions"][0]["emotion"]["anger"] = 0.9
             elif expected_emotion == "disgust":
-                payload["emotion"]["disgust"]["score"] = 0.9
+                payload["emotionPredictions"][0]["emotion"]["disgust"] = 0.9
             elif expected_emotion == "sadness":
-                payload["emotion"]["sadness"]["score"] = 0.9
+                payload["emotionPredictions"][0]["emotion"]["sadness"] = 0.9
             elif expected_emotion == "fear":
-                payload["emotion"]["fear"]["score"] = 0.9
+                payload["emotionPredictions"][0]["emotion"]["fear"] = 0.9
 
             with patch("EmotionDetection.emotion_detection.requests.post") as mock_post:
                 mock_post.return_value = FakeResponse(200, payload)
